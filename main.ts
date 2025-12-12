@@ -8,8 +8,9 @@ import {
 	PluginSettingTab,
 	Setting,
 } from "obsidian";
-import setAliases from "./libs/setAliases";
+import setParent from "./libs/setParent";
 import updateTimestamp from "libs/updateTimestamp";
+import setAliases from "libs/setAliases";
 
 // Remember to rename these classes and interfaces!
 
@@ -30,8 +31,13 @@ export default class MyPlugin extends Plugin {
 			name: "On save",
 			editorCallback: async (_editor: Editor, _view: MarkdownView) => {
 				try {
-					await setAliases(this.app);
+					const activeFile = this.app.workspace.getActiveFile();
+					if (activeFile?.path.includes("10_Zettelkasten")) {
+						await setParent(this.app);
+						await setAliases(this.app);
+					}
 					await updateTimestamp(this.app);
+					new Notice("saved", 2000);
 				} catch (error) {
 					console.error(error);
 				}

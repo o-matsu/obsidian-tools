@@ -1,16 +1,11 @@
 import { App } from "obsidian";
 
-function getParentId(title: string) {
-	const idMatch = title.match(/^([a-zA-Z0-9]+)[_-]/);
-	if (!idMatch) {
+function getAlias(title: string) {
+	const aliasMatch = title.match(/^[a-zA-Z0-9]+[_-](.+)$/);
+	if (!aliasMatch) {
 		return null;
 	}
-	const id = idMatch[1];
-	// 末尾1文字を削除（IDが1文字の場合はnull）
-	if (id.length <= 1) {
-		return null;
-	}
-	return id.slice(0, -1);
+	return aliasMatch[1];
 }
 
 export default async function setAliases(app: App) {
@@ -20,24 +15,12 @@ export default async function setAliases(app: App) {
 	}
 
 	const title = activeFile.basename;
-	const parentId = getParentId(title);
-	if (!parentId) {
-		throw new Error("親メモのIDを抽出できませんでした。");
+	const alias = getAlias(title);
+	if (!alias) {
+		throw new Error("タイトルからエイリアスを抽出できませんでした。");
 	}
-	const files = app.vault.getMarkdownFiles();
-	const parentNote = files.filter((file) =>
-		file.name.startsWith(parentId + "_")
-	);
-	if (!parentNote) {
-		throw new Error("親メモが見つかりませんでした。");
-	}
-	await app.fileManager.processFrontMatter(
-		activeFile,
-		(fm) => {
-			fm.parent = "[[" + parentNote[0].basename + "]]";
-		}
-	);
-
-	// new Notice(`親メモをリンクしました: ${parentNote[0].basename}`, 2000);
-	console.log(`親メモをリンクしました: ${parentNote[0].basename}`);
+	await app.fileManager.processFrontMatter(activeFile, (fm) => {
+		fm.aliases = [alias];
+	});
+	console.log(`エイリアスを生成しました: ${alias}`);
 }
