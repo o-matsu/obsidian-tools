@@ -28,19 +28,12 @@ export default class MyPlugin extends Plugin {
 		this.addCommand({
 			id: "obsidian-tools-on-save",
 			name: "On save",
-			checkCallback: (checking: boolean) => {
-				const markdownView =
-					this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					if (!checking) {
-						try {
-							setAliases(this.app);
-							updateTimestamp(this.app);
-						} catch (error) {
-							console.error(error);
-						}
-					}
-					return true;
+			editorCallback: async (_editor: Editor, _view: MarkdownView) => {
+				try {
+					await setAliases(this.app);
+					await updateTimestamp(this.app);
+				} catch (error) {
+					console.error(error);
 				}
 			},
 		});
