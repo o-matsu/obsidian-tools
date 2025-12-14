@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-tools",
-	"name": "My Tools",
+	"id": "zettelkasten-tools",
+	"name": "Zettelkasten Tools",
 	"version": "0.0.0",
 	"minAppVersion": "1.10.6",
-	"description": "My Tools",
+	"description": "Zettelkasten Tools",
 	"author": "o-matsu",
-	"authorUrl": "https://obsidian.md",
+	"authorUrl": "https://github.com/o-matsu/zettelkasten-tools",
 	"isDesktopOnly": false
 }
