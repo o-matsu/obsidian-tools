@@ -67,7 +67,7 @@ export default class ZettelkastenTools extends Plugin {
 			editorCallback: async (_editor: Editor, _view: MarkdownView) => {
 				try {
 					const activeFile = this.app.workspace.getActiveFile();
-					if (activeFile?.path.includes("10_Zettelkasten")) {
+					if (activeFile?.path.startsWith(this.settings.zettelkastenFolder)) {
 						await setParent(this.app);
 						await setAliases(this.app);
 					}
