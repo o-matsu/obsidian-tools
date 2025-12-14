@@ -60,6 +60,15 @@ export default class ZettelkastenTools extends Plugin {
 				}
 			}
 		);
+		this.addRibbonIcon("play", "Next Note", async (_evt: MouseEvent) => {
+			try {
+				await createNextFile(this.app, this.settings);
+				new Notice("next note created", 2000);
+			} catch (error) {
+				console.error(error);
+				new Notice("failed to create next note", 2000);
+			}
+		});
 
 		this.addCommand({
 			id: "zettelkasten-tools-on-save",
